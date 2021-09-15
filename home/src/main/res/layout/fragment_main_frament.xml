@@ -52,7 +52,13 @@
                 />
         </LinearLayout>
 
-
+        <include
+            android:id="@+id/progress_bar"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            layout="@layout/item_loading"
+            android:layout_alignParentBottom="true"/>
 
     </RelativeLayout>
 

@@ -22,15 +22,11 @@ class SearchAdapter(private val searchResultsList: MutableList<SearchResults.Sea
     internal lateinit var context: Context
 
     inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-//        internal var title: TextView? = null
-//        internal var year: TextView? = null
-//        internal var poster: ImageView? = null
-
-        init {
-
-//            title = view.findViewById(R.id.title)
-//            year = view.findViewById(R.id)
-//            poster = view.findViewById(R.id.poster)
+        fun bind(searchItem: SearchResults.SearchItem) {
+            itemView.title.text = searchItem.title
+            itemView.year.text = searchItem.year
+            Glide.with(context).load(searchItem.poster)
+                .into(itemView.poster)
         }
     }
 
@@ -49,13 +45,7 @@ class SearchAdapter(private val searchResultsList: MutableList<SearchResults.Sea
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val searchResults = searchResultsList[position]
         when (getItemViewType(position)) {
-            ITEM -> {
-
-                holder.itemView.title.text = searchResults.title
-                holder.itemView.year.text = searchResults.year
-                Glide.with(context).load(searchResults.poster)
-                    .into(holder.itemView.poster)
-            }
+            ITEM -> holder.bind(searchResults)
         }
     }
 
@@ -76,6 +66,11 @@ class SearchAdapter(private val searchResultsList: MutableList<SearchResults.Sea
         for (result in moveResults) {
             add(result)
         }
+    }
+
+    fun replaceAll(moveResults: List<SearchResults.SearchItem>) {
+        searchResultsList.removeAll { true }
+        addAll(moveResults)
     }
 
     fun remove(r: SearchResults.SearchItem?) {

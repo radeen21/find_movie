@@ -17,7 +17,6 @@ class SearchViewModel :
 
     private var repositoryImpl: GetSearchMovie
 
-
     @Inject
     constructor(repositoryImpl: GetSearchMovie) : super(null) {
         this.repositoryImpl = repositoryImpl
@@ -38,16 +37,22 @@ class SearchViewModel :
         refreshSearch()
     }
 
-    private suspend fun fetchSearch() {
-        repositoryImpl.addParam(GetSearchMovie.Params("avenger", Constant.API_KEY, 1))
+    suspend fun fetchSearch(keyword: String, page:Int) {
+        searchTitle = keyword
+        repositoryImpl.addParam(GetSearchMovie.Params(keyword, Constant.API_KEY, page))
             .execute(coroutineScope)
             .toResult()
             .run(mutableRepo::postValue)
     }
 
+
+    fun search(keyword: String, page: Int) {
+        GlobalScope.launch { fetchSearch(keyword, page) }
+    }
+
     fun refreshSearch() {
         GlobalScope.launch {
-            fetchSearch()
+            fetchSearch(searchTitle, 1)
         }
     }
 }
