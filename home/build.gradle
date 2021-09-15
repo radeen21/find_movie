@@ -1,0 +1,71 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
+}
+
+android {
+    compileSdkVersion androidCompileSdkVersion
+    buildToolsVersion androidBuildToolsVersion
+
+    defaultConfig {
+        minSdkVersion androidMinSdkVersion
+        targetSdkVersion androidTargetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        dataBinding = true
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation kotlinStdLib
+
+    api project(':base')
+
+    //androidx
+    implementation support.appcompat
+    implementation support.constraint
+    implementation support.recyclerview
+    implementation support.core
+    implementation support.design
+
+    //navigation
+    implementation support.navigationUi
+    implementation support.navigationFragment
+
+    //paging
+    implementation support.paging
+
+    //dependency injection
+//    implementation support.koin
+//    implementation support.koinScope
+//    implementation support.koinViewmodel
+    implementation libs.dagger
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    kapt libs.daggerCompiler
+
+    implementation libs.shimmerRecyclerView
+    implementation libs.cardview
+    implementation libs.glide
+
+
+    //network
+    implementation libs.retrofit
+
+    androidTestImplementation test.testRunner
+    androidTestImplementation test.espresso
+    testImplementation test.jUnit
+    testImplementation test.mockito
+    testImplementation test.mockitoInline
+    testImplementation test.assertj
+    testImplementation test.coreTest
+    testImplementation test.coroutinesTest
+    testImplementation test.fragmentTest
+}

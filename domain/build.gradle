@@ -1,0 +1,58 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
+}
+
+android {
+    compileSdkVersion androidCompileSdkVersion
+    buildToolsVersion androidBuildToolsVersion
+
+    defaultConfig {
+        minSdkVersion androidMinSdkVersion
+        targetSdkVersion androidTargetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    // Add for using latest experimental build of Android Extensions
+    androidExtensions {
+        experimental = true
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation kotlinStdLib
+
+    //appcompat
+    implementation support.appcompat
+
+    //network
+    api libs.retrofit
+    api libs.okhttp
+    api libs.gson
+
+    implementation libs.rxjava
+    implementation libs.androidAnnotations
+
+    implementation libs.dagger
+    kapt libs.daggerCompiler
+
+    //database
+//    implementation support.room
+//    kapt support.roomCompiler
+//    implementation support.roomCommon
+//    implementation support.roomRxJava
+
+
+    implementation support.coroutines
+    implementation support.coroutinesCore
+
+    testImplementation test.jUnit
+    androidTestImplementation test.testRunner
+    androidTestImplementation test.espresso
+}

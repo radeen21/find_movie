@@ -1,0 +1,101 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
+}
+
+def cprops = new Properties()
+cprops.load(new FileInputStream(file('config.properties')))
+def config = new ConfigSlurper().parse(cprops)
+
+android {
+    compileSdkVersion androidCompileSdkVersion
+    buildToolsVersion androidBuildToolsVersion
+    defaultConfig {
+        applicationId "com.example.movie_find"
+        minSdkVersion androidMinSdkVersion
+        targetSdkVersion androidTargetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        dataBinding = true
+    }
+
+    buildTypes {
+        debug {
+            debuggable true
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        release {
+            debuggable false
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    flavorDimensions "env"
+    productFlavors {
+        development {
+            dimension "env"
+            applicationId "com.example.movie_find.dev"
+            buildConfigField("String", "API_BASE_URL", config.env.dev.baseurl)
+        }
+        staging {
+            dimension "env"
+            applicationId "com.example.movie_find.dev"
+            buildConfigField("String", "API_BASE_URL", config.env.staging.baseurl)
+        }
+        production {
+            dimension "env"
+            applicationId 'com.example.movie_find'
+            buildConfigField("String", "API_BASE_URL", config.env.prod.baseurl)
+        }
+    }
+//    compileOptions {
+//        sourceCompatibility JavaVersion.VERSION_1_8
+//        targetCompatibility JavaVersion.VERSION_1_8
+//    }
+//    kotlinOptions {
+//        jvmTarget = '1.8'
+//    }
+}
+
+dependencies {
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation kotlinStdLib
+
+    api project(':home')
+    api project(':base')
+
+    //androidx
+    implementation support.appcompat
+    implementation support.constraint
+    implementation support.recyclerview
+    implementation support.core
+    implementation support.design
+
+    implementation libs.dagger
+    kapt libs.daggerCompiler
+
+    //navigation
+    implementation support.navigationUi
+    implementation support.navigationFragment
+
+    //network
+    implementation libs.retrofit
+    implementation libs.okhttp
+    implementation libs.gson
+
+    testImplementation test.jUnit
+    androidTestImplementation test.testRunner
+    androidTestImplementation test.espresso
+
+}
